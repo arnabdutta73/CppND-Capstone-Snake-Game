@@ -2,6 +2,8 @@
 #include <iostream>
 #include "SDL.h"
 
+#include "scoring.cpp"
+
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
       engine(dev()),
@@ -36,7 +38,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer.UpdateWindowTitle(score, frame_count);
+      renderer.UpdateWindowTitle(score, frame_count, gamertag);
       frame_count = 0;
       title_timestamp = frame_end;
     }
@@ -79,9 +81,18 @@ void Game::Update() {
     PlaceFood();
     // Grow snake and increase speed.
     snake.GrowBody();
+    // if (snake.
     snake.speed += 0.02;
   }
 }
 
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
+
+void Game::SetScore() {
+  Scoring my_score;
+  my_score.SetName(gamertag);
+  my_score.SetScore(score);
+  cout << "GamerTag: "<< my_score.GetName() << endl << "Game Score: "<< my_score.GetScore() << endl;
+  my_score.Scoring::WriteScore();
+}
