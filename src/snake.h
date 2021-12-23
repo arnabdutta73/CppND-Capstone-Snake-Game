@@ -8,6 +8,7 @@ class Snake {
  public:
   enum class Direction { kUp, kDown, kLeft, kRight };
 
+
   Snake(int grid_width, int grid_height)
       : grid_width(grid_width),
         grid_height(grid_height),
@@ -18,6 +19,7 @@ class Snake {
 
   void GrowBody();
   bool SnakeCell(int x, int y);
+  bool WallCells(int x, int y);
 
   Direction direction = Direction::kUp;
 
@@ -27,6 +29,7 @@ class Snake {
   float head_x;
   float head_y;
   std::vector<SDL_Point> body;
+  std::vector<SDL_Point> walls;
 
  private:
   void UpdateHead();

@@ -38,7 +38,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food) {
+void Renderer::Render(Snake const snake, SDL_Point const &food, std::vector<SDL_Point> walls) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -61,6 +61,14 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
     SDL_RenderFillRect(sdl_renderer, &block);
   }
 
+// Render Walls
+  SDL_SetRenderDrawColor(sdl_renderer, 0xAA, 0xAA, 0xAA, 0xFF);
+  for (SDL_Point const &point : walls) {
+    block.x = point.x * block.w;
+    block.y = point.y * block.h;
+    SDL_RenderFillRect(sdl_renderer, &block);
+  }
+  
   // Render snake's head
   block.x = static_cast<int>(snake.head_x) * block.w;
   block.y = static_cast<int>(snake.head_y) * block.h;

@@ -1,15 +1,16 @@
 #include "game.h"
-#include <iostream>
 #include "SDL.h"
+#include <iostream>
 
 #include "scoring.cpp"
+#include "snake.h"
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
-    : snake(grid_width, grid_height),
-      engine(dev()),
+    : snake(grid_width, grid_height), engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
   PlaceFood();
+  GenerateWalls();
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -27,8 +28,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
-
+    renderer.Render(snake, food, snake.walls);
     frame_end = SDL_GetTicks();
 
     // Keep track of how long each loop through the input/update/render cycle
@@ -52,6 +52,23 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
+// Function generates walls in the game
+void Game::GenerateWalls() {
+  int x, y;
+
+  x = random_w(engine);
+  y = random_h(engine);
+  for (int i = 0; i < 10; i++) {
+    if (x % 2 == 0) {
+      SDL_Point wall_point{static_cast<int>(x) + i, static_cast<int>(y)};
+      snake.walls.push_back(wall_point);
+    } else {
+      SDL_Point wall_point{static_cast<int>(x), static_cast<int>(y) + i};
+      snake.walls.push_back(wall_point);
+    }
+  }
+}
+
 void Game::PlaceFood() {
   int x, y;
   while (true) {
@@ -62,13 +79,16 @@ void Game::PlaceFood() {
     if (!snake.SnakeCell(x, y)) {
       food.x = x;
       food.y = y;
-      return;
+      if (!snake.WallCells(x, y)) {
+        return;
+      }
     }
   }
 }
 
 void Game::Update() {
-  if (!snake.alive) return;
+  if (!snake.alive)
+    return;
 
   snake.Update();
 
@@ -93,6 +113,7 @@ void Game::SetScore() {
   Scoring my_score;
   my_score.SetName(gamertag);
   my_score.SetScore(score);
-  cout << "GamerTag: "<< my_score.GetName() << endl << "Game Score: "<< my_score.GetScore() << endl;
+  cout << "GamerTag: " << my_score.GetName() << endl
+       << "Game Score: " << my_score.GetScore() << endl;
   my_score.Scoring::WriteScore();
 }

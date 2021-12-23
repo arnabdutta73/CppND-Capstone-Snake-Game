@@ -16,7 +16,7 @@ class Game {
   int GetScore() const;
   int GetSize() const;
   void SetScore();
-
+  void GenerateWalls();
  private:
   Snake snake;
   SDL_Point food;

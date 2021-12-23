@@ -7,12 +7,16 @@
 using namespace std;
 
 int main(int argc, char **argv) {
+
+  // Checking for --help argument
   if (argc == 2 && strcmp(argv[1], "--help") == 0) {
     cout << "Usage: \n./SnakeGame <gamertag> \n <gamertag>: the name under which "
             "you want your score to be stored."
          << endl;
     return 0;
   }
+
+  /// Capturing GamerTag from terminal
   string name;
   if (argc > 1)
     name = argv[1];
@@ -20,6 +24,7 @@ int main(int argc, char **argv) {
     name = "Default";
     cout << "No Name given. Choosing Default." << endl;
   }
+
   constexpr std::size_t kFramesPerSecond{60};
   constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};
   constexpr std::size_t kScreenWidth{640};
@@ -31,10 +36,15 @@ int main(int argc, char **argv) {
   Controller controller;
   Game game(kGridWidth, kGridHeight);
 
+  // Setting name to uppercase
   for (auto &c : name)
     c = toupper(c);
+
+  // setting GamerTag
   game.gamertag = name;
   game.Run(controller, renderer, kMsPerFrame);
+
+  // Finally, Setting Score.
   game.SetScore();
   return 0;
 }
