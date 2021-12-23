@@ -1,3 +1,5 @@
+<img src="Snake_with_walls.gif"/>
+
 # CPPND: Capstone Snake Game Example
 ---
 This is my repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
@@ -43,8 +45,7 @@ This is the classic Snakes game with a little added twist.
 
 - There is now a wall placed randomely in the game as well which the snake has to avoid because if it collides with the wall, it will die and the game will end.
 
-Following gif file shows one gameplay of the Snake Game with added walls and GamerTag display:
-<img src="Snake_with_walls.gif"/>
+
 
 ---
 ## Rubric Points
